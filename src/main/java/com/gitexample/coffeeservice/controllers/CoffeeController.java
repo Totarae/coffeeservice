@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.constraints.Min;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -36,6 +34,7 @@ public class CoffeeController {
     public Coffee create(@Valid @RequestBody Coffee coffee, Errors errors) throws ValidationException {
 
         if (errors.hasErrors()) {
+            log.error("Validation Failed!");
             // Extract ConstraintViolation list from body errors
             List<ConstraintViolation<?>> violationsList = new ArrayList<>();
             for (ObjectError e : errors.getAllErrors()) {
@@ -48,8 +47,19 @@ public class CoffeeController {
             for (ConstraintViolation<?> violation : violationsList) {
                 exceptionMessage += violation.getMessage() + System.lineSeparator();
             }
+            log.error("Validation fail cause"+exceptionMessage);
             throw new ValidationException(exceptionMessage);
         }
+
+        Optional<Coffee> opt = Optional.ofNullable(reps.findById(coffee.getId()));
+
+        opt.ifPresentOrElse(
+            value -> {
+                log.info("Coffee record is updated {} ", value);
+                },
+            () -> {
+            log.info("New coffee record created");
+            });
 
         return reps.save(coffee);
     }
@@ -64,6 +74,18 @@ public class CoffeeController {
     public String Pretty(Model model) {
         model.addAttribute("coffee", reps.findAll());
         return "coffee/list";
+    }
+
+    @ResponseBody
+    @GetMapping(value="/coffee/show/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Coffee showById(@PathVariable @Min(1) Integer id){
+        return reps.findById(Long.valueOf(id));
+    }
+
+    @GetMapping("/coffee/show/{id}/pretty")
+    public String showByIdPretty(@PathVariable @Min(1) Integer id, Model model){
+        model.addAttribute("item", reps.findById(new Long(id)));
+        return "coffee/item";
     }
 
     @ResponseBody

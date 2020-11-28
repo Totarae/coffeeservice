@@ -7,4 +7,5 @@ import java.util.List;
 public interface CoffeeService  {
     Coffee save(Coffee coffee);
     List<Coffee> findAll();
+    Coffee findById(Long aLong);
 }

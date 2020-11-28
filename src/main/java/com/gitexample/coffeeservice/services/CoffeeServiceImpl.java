@@ -31,4 +31,9 @@ public class CoffeeServiceImpl  implements CoffeeService {
         List<Coffee> temp = coffeerepo.findAll();
         return temp;
     }
+
+    @Override
+    public Coffee findById(Long aLong) {
+        return coffeerepo.findAllById(aLong);
+    }
 }

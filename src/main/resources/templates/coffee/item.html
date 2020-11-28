@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Coffee List</title>
+    <title>Coffee Item</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"
           th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}">
@@ -12,7 +12,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
             integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"
             th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}"></script>
-
 </head>
 <body>
 <div class="container-fluid" style="margin-top: 20px">
@@ -27,36 +26,37 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover ">
-                            <thead class="thead-inverse">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Sort</th>
-                                <th>Cost</th>
-                                <th>Country</th>
-                            </tr>
-                            </thead>
-                            <tr th:if="${coffee.empty}" >
-                                <td colspan="2"> No Coffee Available </td>
-                            </tr>
-
-                            <tr th:each="coffies : ${coffee}">
-                                <td th:text="${coffies.id}"/>
-                                <td th:text="${coffies.name}"/>
-                                <td th:text="${coffies.sort}"/>
-                                <td th:text="${coffies.cost}"/>
-                                <td th:text="${coffies.country}"/>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Sort</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Country</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${item == null}">
+                            <td colspan="5">No Coffee Description Found</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr>
+                        <tr>
+                            <td th:text="${item.id}"/>
+                            <td th:text="${item.name != null} ? ${item.name} : '-'"/>
+                            <td th:text="${item.sort != null} ? ${item.sort} : '-'"/>
+                            <td th:text="${item.cost != null} ? ${item.cost} : '-'"/>
+                            <td th:text="${item.country != null} ? ${item.country} : '-'"/>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-</table>
 </body>
 </html>
